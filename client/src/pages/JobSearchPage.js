@@ -1,60 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import JobList from '../components/JobList';
 
 const JobSearchPage = () => {
-  const [formData, setFormData] = useState({
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
     keywords: '',
     location: '',
+    jobType: '',
   });
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  const { keywords, location } = formData;
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setLoading(true);
+      try {
+        const { keywords, location, jobType } = filters;
+        const res = await axios.get('/api/jobs', {
+          params: { keywords, location, jobType },
+        });
+        setJobs(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    };
+    fetchJobs();
+  }, [filters]);
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleApply = async (jobId) => {
     try {
-      const res = await axios.get(
-        `/api/jobs/search?keywords=${keywords}&location=${location}`
-      );
-      setJobs(res.data);
+      await axios.post(`/api/jobs/${jobId}/apply`);
+      alert('Successfully applied for the job!');
     } catch (err) {
-      console.error(err);
+      alert(err.response.data.msg || 'Error applying for the job.');
     }
-    setLoading(false);
   };
 
   return (
     <div>
-      <h1>Job Search</h1>
-      <form onSubmit={onSubmit}>
+      <h1>Find Your Next Job</h1>
+      <div>
+        <input
+          type="text"
+          placeholder="Keywords (e.g., 'React', 'Node.js')"
+          name="keywords"
+          value={filters.keywords}
+          onChange={handleFilterChange}
+        />
+        <input
+          type="text"
+          placeholder="Location (e.g., 'Remote', 'New York')"
+          name="location"
+          value={filters.location}
+          onChange={handleFilterChange}
+        />
+        <select name="jobType" value={filters.jobType} onChange={handleFilterChange}>
+          <option value="">All Job Types</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract</option>
+          <option value="Internship">Internship</option>
+        </select>
+      </div>
+      <hr />
+      {loading ? (
+        <p>Loading jobs...</p>
+      ) : (
         <div>
-          <input
-            type="text"
-            placeholder="Keywords"
-            name="keywords"
-            value={keywords}
-            onChange={onChange}
-            required
-          />
+          {jobs.length > 0 ? (
+            jobs.map((job) => (
+              <div key={job._id} style={{ border: '1px solid #ccc', padding: '10px', margin: '10px 0' }}>
+                <h3>{job.title}</h3>
+                <h4>{job.company.name}</h4>
+                <p>{job.location}</p>
+                <p><strong>Job Type:</strong> {job.jobType}</p>
+                {job.salary && <p><strong>Salary:</strong> ${job.salary.toLocaleString()}</p>}
+                <p>{job.description.substring(0, 150)}...</p>
+                <button onClick={() => handleApply(job._id)}>Apply Now</button>
+              </div>
+            ))
+          ) : (
+            <p>No jobs found matching your criteria. Try broadening your search.</p>
+          )}
         </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Location"
-            name="location"
-            value={location}
-            onChange={onChange}
-          />
-        </div>
-        <input type="submit" value="Search" />
-      </form>
-      {loading ? <p>Loading...</p> : <JobList jobs={jobs} />}
+      )}
     </div>
   );
 };
