@@ -1,0 +1,46 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+
+    - name: Install backend dependencies
+      run: npm install
+
+    - name: Install frontend dependencies
+      run: npm install --prefix client
+
+    - name: Run backend tests
+      # Backend testleri zaman aşımına uğrayabildiği için ayrı ayrı çalıştırıyoruz
+      run: |
+        npm test -- tests/auth.test.js
+        npm test -- tests/jobs.test.js
+        npm test -- tests/resume.test.js
+      env:
+        CI: true
+
+    - name: Run frontend tests
+      run: npm test --prefix client -- --watchAll=false
+      env:
+        CI: true

@@ -29,7 +29,7 @@ router.get('/search', async (req, res) => {
       const company = $(el).find('.companyName').text().trim();
       const location = $(el).find('.companyLocation').text().trim();
       const summary = $(el).find('.job-snippet').text().trim();
-      const url = 'https://www.indeed.com' + $(el).find('.jcs-JobTitle').attr('href');
+      const url = 'https://www.indeed.com' + $(el).find('.jcs-JobTitle a').attr('href');
 
       jobs.push({ title, company, location, summary, url });
     });
