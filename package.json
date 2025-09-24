@@ -25,6 +25,11 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.2"
+    "mongoose": "^8.18.2",
+    "retext": "^9.0.0",
+    "retext-english": "^5.0.0",
+    "retext-keywords": "^8.0.2",
+    "retext-pos": "^5.0.0",
+    "unified": "^11.0.5"
   }
 }

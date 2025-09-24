@@ -2,8 +2,31 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 const User = require('../models/User');
 require('dotenv').config();
+
+const { groupSkillsByCategory } = require('../services/skillCategoryService');
+
+// @route   GET api/auth
+// @desc    Get user by token
+// @access  Private
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    const userObject = user.toObject();
+    userObject.groupedSkills = groupSkillsByCategory(user.skills);
+
+    res.json(userObject);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route   POST api/auth/register
 // @desc    Register user

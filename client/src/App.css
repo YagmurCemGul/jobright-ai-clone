@@ -1,5 +1,167 @@
-.App {
-  text-align: center;
+/* General App Layout */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f4f7f9;
+  color: #333;
+  margin: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Skills Section on Resume Page */
+.skills-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.skill-category {
+  margin-bottom: 1.5rem;
+}
+
+.skill-category h3 {
+  color: #0056b3;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.skills-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.skill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.skill-item:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.skill-item:hover {
+  background-color: #f0f0f0;
+}
+
+.skill-name {
+  font-weight: 500;
+}
+
+.skill-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-controls select {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.delete-btn {
+  background: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background: #d63234;
+}
+
+/* Add Skill Form */
+.add-skill-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-skill-form input[type="text"],
+.add-skill-form select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+.add-skill-form button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-skill-form button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Job List Item & Skill Tags */
+.job-list-item {
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.job-list-item:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.match-details {
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.skill-tag {
+  background-color: #e1ecf4;
+  color: #39739d;
+  padding: 0.4em 0.9em;
+  border-radius: 15px; /* Pill shape */
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.category-tag {
+  background-color: #d4edda;
+  color: #155724;
 }
 
 .App-logo {
