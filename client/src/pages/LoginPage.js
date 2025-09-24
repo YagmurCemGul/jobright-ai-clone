@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginPage = () => {
+  const { login, isAuthenticated, user, error } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (user?.role === 'employer') {
+        navigate('/dashboard');
+      } else {
+        navigate('/search');
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,22 +26,16 @@ const LoginPage = () => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      alert('Logged in successfully!');
-    } catch (err) {
-      console.error(err.response.data);
-      alert('Error logging in');
-    }
+    login(formData);
   };
 
   return (
     <div>
       <h1>Login</h1>
       <form onSubmit={onSubmit}>
+        {error && <p>{error}</p>}
         <div>
           <input
             type="email"
@@ -51,6 +59,10 @@ const LoginPage = () => {
         </div>
         <input type="submit" value="Login" />
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register as a Job Seeker</Link> or{' '}
+        <Link to="/employer/register">Register as an Employer</Link>
+      </p>
     </div>
   );
 };

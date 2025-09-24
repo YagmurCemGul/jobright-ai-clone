@@ -1,39 +1,40 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import JobSearchPage from './pages/JobSearchPage';
 import ResumePage from './pages/ResumePage';
-import setAuthToken from './utils/setAuthToken';
+import EmployerRegisterPage from './pages/EmployerRegisterPage';
+import EmployerDashboardPage from './pages/EmployerDashboardPage';
+import JobCreatePage from './pages/JobCreatePage';
+import ApplicantsPage from './pages/ApplicantsPage';
+import EmployerRoute from './components/EmployerRoute';
+import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
-
 function App() {
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-  }, []);
-
   return (
-    <Router>
-      <>
-        <Navbar />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<JobSearchPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/search" element={<JobSearchPage />} />
-            <Route path="/resume" element={<ResumePage />} />
-          </Routes>
-        </div>
-      </>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <>
+          <Navbar />
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<JobSearchPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/employer/register" element={<EmployerRegisterPage />} />
+              <Route path="/search" element={<JobSearchPage />} />
+              <Route path="/resume" element={<ResumePage />} />
+              <Route path="/dashboard" element={<EmployerRoute><EmployerDashboardPage /></EmployerRoute>} />
+              <Route path="/jobs/new" element={<EmployerRoute><JobCreatePage /></EmployerRoute>} />
+              <Route path="/jobs/:id/applicants" element={<EmployerRoute><ApplicantsPage /></EmployerRoute>} />
+            </Routes>
+          </div>
+        </>
+      </Router>
+    </AuthProvider>
   );
 }
 

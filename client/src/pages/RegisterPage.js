@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const RegisterPage = () => {
+  const { register, isAuthenticated, error } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/search');
+    }
+  }, [isAuthenticated, navigate]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
