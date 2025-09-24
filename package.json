@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,10 +19,14 @@
     "url": "https://github.com/YagmurCemGul/jobright-ai-clone/issues"
   },
   "homepage": "https://github.com/YagmurCemGul/jobright-ai-clone#readme",
+  "engines": {
+    "node": "18.x"
+  },
   "dependencies": {
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",
     "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 const ResumePage = () => {
   const [file, setFile] = useState('');
@@ -15,7 +15,7 @@ const ResumePage = () => {
     formData.append('resume', file);
 
     try {
-      const res = await axios.post('/api/resume/upload', formData, {
+      const res = await api.post('/resume/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

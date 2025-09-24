@@ -1,0 +1,34 @@
+name: Deploy Backend to Heroku
+
+on:
+  push:
+    branches:
+      - main
+    # Sadece backend kodunda değişiklik olduğunda çalışmasını sağlamak için path filtresi ekleyebiliriz,
+    # ama şimdilik her main push'unda çalışması daha basit ve genel bir başlangıç.
+    # paths:
+    #   - 'server.js'
+    #   - 'routes/**'
+    #   - 'models/**'
+    #   - 'config/**'
+    #   - 'package.json'
+    #   - 'package-lock.json'
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        env:
+          # Eğer Heroku uygulamanızda başka environment variable'lar varsa,
+          # onları da buraya ekleyebilirsiniz. Örneğin:
+          # HD_MONGO_URI: ${{ secrets.MONGO_URI }}
+          # HD_JWT_SECRET: ${{ secrets.JWT_SECRET }}

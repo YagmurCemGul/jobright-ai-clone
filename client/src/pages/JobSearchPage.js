@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import JobList from '../components/JobList';
 
 const JobSearchPage = () => {
@@ -19,8 +19,8 @@ const JobSearchPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.get(
-        `/api/jobs/search?keywords=${keywords}&location=${location}`
+      const res = await api.get(
+        `/jobs/search?keywords=${keywords}&location=${location}`
       );
       setJobs(res.data);
     } catch (err) {
