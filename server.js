@@ -15,6 +15,8 @@ app.get('/', (req, res) => res.send('API Running'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/resume', require('./routes/resume'));
+app.use('/api/connections', require('./routes/connections'));
+app.use('/api/notifications', require('./routes/notifications'));
 
 const PORT = process.env.PORT || 5000;
 
