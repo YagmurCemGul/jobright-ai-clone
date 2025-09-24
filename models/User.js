@@ -22,6 +22,17 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  skills: [{
+    name: {
+      type: String,
+      required: true
+    },
+    level: {
+      type: String,
+      enum: ['Başlangıç', 'Orta', 'İleri', 'Uzman', 'Belirtilmedi'],
+      default: 'Belirtilmedi'
+    }
+  }],
 });
 
 module.exports = User = mongoose.model('user', UserSchema);
