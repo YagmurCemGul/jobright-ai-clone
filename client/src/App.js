@@ -1,40 +1,36 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import JobSearchPage from './pages/JobSearchPage';
-import ResumePage from './pages/ResumePage';
-import setAuthToken from './utils/setAuthToken';
-import './App.css';
-
-if (localStorage.token) {
-  setAuthToken(localStorage.token);
-}
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Register, Landing, Error, ProtectedRoute } from './pages'
+import {
+  AllJobs,
+  Profile,
+  SharedLayout,
+  Stats,
+  AddJob,
+} from './pages/dashboard'
 
 function App() {
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    }
-  }, []);
-
   return (
-    <Router>
-      <>
-        <Navbar />
-        <div className="container">
-          <Routes>
-            <Route path="/" element={<JobSearchPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/search" element={<JobSearchPage />} />
-            <Route path="/resume" element={<ResumePage />} />
-          </Routes>
-        </div>
-      </>
-    </Router>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <ProtectedRoute>
+              <SharedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Stats />} />
+          <Route path='all-jobs' element={<AllJobs />} />
+          <Route path='add-job' element={<AddJob />} />
+          <Route path='profile' element={<Profile />} />
+        </Route>
+        <Route path='/register' element={<Register />} />
+        <Route path='/landing' element={<Landing />} />
+        <Route path='*' element={<Error />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
