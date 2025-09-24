@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,10 +20,14 @@ const LoginPage = () => {
     try {
       const res = await axios.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
-      alert('Logged in successfully!');
+      onLogin();
+      toast.success('Logged in successfully!');
+      setTimeout(() => {
+        navigate('/search');
+      }, 1000);
     } catch (err) {
       console.error(err.response.data);
-      alert('Error logging in');
+      toast.error('Error logging in');
     }
   };
 
