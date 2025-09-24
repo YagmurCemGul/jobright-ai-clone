@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm test --prefix client",
+    "test:backend": "JWT_SECRET=testsecret jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,14 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.2"
+    "mongoose": "^8.18.2",
+    "multer": "^2.0.2",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "mongodb-memory-server": "^10.2.1",
+    "react-router-dom": "^7.9.2",
+    "supertest": "^7.1.4"
   }
 }
