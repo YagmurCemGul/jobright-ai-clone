@@ -1,0 +1,30 @@
+name: Deploy Frontend to Vercel
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'client/**'
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod' # Production dağıtımı için
+          working-directory: ./client # Projenin client klasöründe olduğunu belirtir
+        env:
+          # Vercel projenizin Environment Variables ayarlarından
+          # REACT_APP_API_URL'i tanımlamanız gerekmektedir.
+          # Bu secret, Heroku backend'inizin URL'i olmalıdır.
+          # Örnek: https://sizin-heroku-uygulamaniz.herokuapp.com/api
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
