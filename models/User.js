@@ -22,6 +22,28 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  connections: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
+  pendingConnections: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
+  sentConnections: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
+  currentCompany: {
+    type: String,
+    default: '',
+  },
 });
 
 module.exports = User = mongoose.model('user', UserSchema);

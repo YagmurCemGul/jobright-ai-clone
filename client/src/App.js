@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import JobSearchPage from './pages/JobSearchPage';
 import ResumePage from './pages/ResumePage';
+import NetworkPage from './pages/NetworkPage';
 import setAuthToken from './utils/setAuthToken';
 import './App.css';
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/search" element={<JobSearchPage />} />
             <Route path="/resume" element={<ResumePage />} />
+            <Route path="/network" element={<NetworkPage />} />
           </Routes>
         </div>
       </>
