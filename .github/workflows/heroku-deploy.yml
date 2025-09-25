@@ -29,6 +29,6 @@ jobs:
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
         env:
           # Eğer Heroku uygulamanızda başka environment variable'lar varsa,
-          # onları da buraya ekleyebilirsiniz. Örneğin:
+          # You can also add them here. For example:
           # HD_MONGO_URI: ${{ secrets.MONGO_URI }}
           # HD_JWT_SECRET: ${{ secrets.JWT_SECRET }}
