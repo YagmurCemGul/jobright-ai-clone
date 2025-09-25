@@ -21,10 +21,9 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod' # Production dağıtımı için
-          working-directory: ./client # Projenin client klasöründe olduğunu belirtir
+          working-directory: ./client # Specifies that the project is in the client directory
         env:
-          # Vercel projenizin Environment Variables ayarlarından
-          # REACT_APP_API_URL'i tanımlamanız gerekmektedir.
-          # Bu secret, Heroku backend'inizin URL'i olmalıdır.
-          # Örnek: https://sizin-heroku-uygulamaniz.herokuapp.com/api
+          # You need to define REACT_APP_API_URL in your Vercel project's Environment Variables settings.
+          # This secret should be the URL of your Heroku backend.
+          # Example: https://your-heroku-app.herokuapp.com/api
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
