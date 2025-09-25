@@ -1,4 +1,4 @@
-# Files and directories not to be sent to Heroku
+# Heroku'ya gönderilmeyecek dosyalar ve dizinler
 client/
 .github/
 node_modules/

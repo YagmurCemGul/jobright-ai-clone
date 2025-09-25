@@ -20,7 +20,7 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod' # Deploy to production
+          vercel-args: '--prod' # Production dağıtımı için
           working-directory: ./client # Projenin client klasöründe olduğunu belirtir
         env:
           # Vercel projenizin Environment Variables ayarlarından
