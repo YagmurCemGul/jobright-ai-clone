@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    # Sadece backend kodunda değişiklik olduğunda çalışmasını sağlamak için path filtresi ekleyebiliriz,
-    # ama şimdilik her main push'unda çalışması daha basit ve genel bir başlangıç.
+    # We could add a path filter to run only when backend code changes,
+    # but for now, running on every main push is simpler and a more general starting point.
     # paths:
     #   - 'server.js'
     #   - 'routes/**'
