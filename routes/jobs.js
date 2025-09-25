@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
-const cheerio = require('cheerio');
+const Job = require('../models/Job');
+const scrapeIndeed = require('../scrapers/indeedScraper');
+const scrapeGlassdoor = require('../scrapers/glassdoorScraper');
 
 // @route   GET api/jobs/search
-// @desc    Search for jobs by scraping Indeed
+// @desc    Search for jobs by scraping sources or retrieving from cache
 // @access  Private
-// @note    This is for demonstration purposes only and is not robust.
-//          The scraper will break if Indeed changes its HTML structure.
 router.get('/search', async (req, res) => {
   const { keywords, location } = req.query;
 
@@ -15,26 +14,46 @@ router.get('/search', async (req, res) => {
     return res.status(400).json({ msg: 'Keywords are required' });
   }
 
-  const indeedUrl = `https://www.indeed.com/jobs?q=${encodeURIComponent(
-    keywords
-  )}&l=${encodeURIComponent(location || '')}`;
+  const searchKeywords = [keywords.toLowerCase()];
 
   try {
-    const { data } = await axios.get(indeedUrl);
-    const $ = cheerio.load(data);
-    const jobs = [];
-
-    $('.jobsearch-SerpJobCard').each((i, el) => {
-      const title = $(el).find('.jcs-JobTitle').text().trim();
-      const company = $(el).find('.companyName').text().trim();
-      const location = $(el).find('.companyLocation').text().trim();
-      const summary = $(el).find('.job-snippet').text().trim();
-      const url = 'https://www.indeed.com' + $(el).find('.jcs-JobTitle').attr('href');
-
-      jobs.push({ title, company, location, summary, url });
+    // Check for cached results
+    const cachedJobs = await Job.find({
+      searchKeywords: { $in: searchKeywords },
     });
 
-    res.json(jobs);
+    if (cachedJobs.length > 0) {
+      console.log('Returning cached results');
+      return res.json(cachedJobs);
+    }
+
+    // If no cached results, scrape sources in parallel
+    console.log('No cached results found, scraping sources...');
+    const [indeedJobs, glassdoorJobs] = await Promise.all([
+      scrapeIndeed(keywords, location),
+      scrapeGlassdoor(keywords, location),
+    ]);
+
+    const combinedJobs = [...indeedJobs, ...glassdoorJobs];
+
+    // Deduplicate results based on URL
+    const uniqueJobs = Array.from(new Map(combinedJobs.map((job) => [job.url, job])).values());
+
+    const jobsToSave = uniqueJobs.map((job) => ({
+      ...job,
+      searchKeywords,
+    }));
+
+    if (jobsToSave.length > 0) {
+      // Use insertMany for efficiency, ignoring duplicate errors
+      await Job.insertMany(jobsToSave, { ordered: false }).catch((err) => {
+        if (err.code !== 11000) {
+          throw err;
+        }
+      });
+    }
+
+    res.json(jobsToSave);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
